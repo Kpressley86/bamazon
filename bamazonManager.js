@@ -91,7 +91,7 @@ function lowInventory() {
 
         var table = new cliTable({
             head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".bgRed.black],
-            colWidths: [13, 20, 20, 13, 13],
+            colWidths: [13, 28, 18, 13, 12],
         });
 
         for (var i = 0; i < res.length; i++) {
@@ -114,7 +114,7 @@ function addInventory() {
 
         var table = new cliTable({
             head: ["Item Number".green, "Product Name".green, "Department".green, "Price".green, "Quantity".green],
-            colWidths: [13, 20, 20, 13, 13],
+            colWidths: [13, 28, 18, 13, 12],
         });
 
         for (var i = 0; i < res.length; i++) {

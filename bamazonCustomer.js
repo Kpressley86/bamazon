@@ -39,7 +39,7 @@ function displayProducts() {
 
         var table = new cliTable({
             head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".cyan],
-            colWidths: [13, 20, 20, 13, 13],
+            colWidths: [13, 28, 18, 13, 12],
         });
 
         for (var i = 0; i < res.length; i++) {
