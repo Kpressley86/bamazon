@@ -9,6 +9,6 @@ const colors = require("colors");
 
 var connection = mysql.createConnection(keys.connection);
 
-connection.connect(function (err) {
+connection.connect((err) => {
     if (err) throw err;
 });

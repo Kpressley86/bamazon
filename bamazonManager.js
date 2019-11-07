@@ -15,18 +15,18 @@ connection.connect((err) => {
 
 var inventoryMsg;
 var welcome =
-    "    ****************************************************************\n" +
-    "    ********               BAMAZON MANAGER                  ********\n" +
-    "    ********         Manage Product Inventories             ********\n" +
+    "     ************************************************************\n" +
+    "    ********              BAMAZON MANAGER APP             ********\n" +
+    "   ********        Manage Inventory and Product Sales      ********\n" +
     "    ********                                                ********\n" +
-    "    ****************************************************************\n\r"
+    "     ************************************************************\n\r"
 
 var goodbye =
-    "    ****************************************************************\n" +
-    "    ********          EXTING BAMAZON MANAGER APP            ********\n" +
-    "    ********                 Work Safe!!!                   ********\n" +
-    "    ********                                                ********\n" +
-    "    ****************************************************************\n\r"
+    "      *****************************************************\n" +
+    "     ********       EXTING BAMAZON MANAGER APP        ********\n" +
+    "    ********              Work Safe!!!                 ********\n" +
+    "     ********                                         ********\n" +
+    "      *****************************************************\n\r"
 
 
 // MANAGER OPTIONS //
@@ -35,7 +35,7 @@ function managerMenu() {
     inquirer.prompt([
         {
             type: "list",
-            message: "What do you want to do?",
+            message: "SELECT Manager Task",
             choices: ["View Current Inventory", "Check Low Inventory", "Add to Inventory", "Add New Products", "Exit"],
             name: "mgrDoItem"
         }
@@ -68,7 +68,7 @@ function displayProducts() {
         if (err) throw err;
 
         var table = new cliTable({
-            head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".cyan],
+            head: ["Item Number".red, "Product Name".yellow, "Department".green, "Price".blue, "Quantity".magenta],
             colWidths: [13, 20, 20, 13, 13],
         });
 
@@ -90,7 +90,7 @@ function lowInventory() {
         if (err) throw err;
 
         var table = new cliTable({
-            head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".cyan],
+            head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".bgRed.black],
             colWidths: [13, 20, 20, 13, 13],
         });
 
@@ -113,7 +113,7 @@ function addInventory() {
         if (err) throw err;
 
         var table = new cliTable({
-            head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".cyan],
+            head: ["Item Number".green, "Product Name".green, "Department".green, "Price".green, "Quantity".green],
             colWidths: [13, 20, 20, 13, 13],
         });
 
@@ -155,7 +155,7 @@ function addInventory() {
 
                         if (error) throw error;
 
-                        inventoryMsg = "     Your restock order for " + userOrder.Qty + "  " + res[i].product_name + " has been placed.  \n";
+                        inventoryMsg = "     You ordered " + userOrder.Qty + "  " + res[i].product_name + " for restocking.  \n";
 
                         console.log(inventoryMsg);
                         managerMenu();
@@ -174,23 +174,23 @@ function addProduct() {
     inquirer.prompt([
         {
             type: "input",
-            message: "What is the name of the product you would like to add? ",
+            message: "Name of the product you would like to add? ",
             name: "itemName"
         },
         {
             type: "list",
-            message: "Which department will this item be under ?",
+            message: "Department this item belongs to?",
             choices: ["Electronics", "Auto", "Apparel"],
             name: "itemDept"
         },
         {
             type: "input",
-            message: "At what price will this be offered?",
+            message: "What is the listing price of this ietem?",
             name: "itemPrice"
         },
         {
             type: "input",
-            message: "How many will initially be stocked?",
+            message: "Quantity of items to be stocked?",
             name: "itemQty"
         },
     ])
@@ -205,7 +205,7 @@ function addProduct() {
                 (err, res) => {
                     if (err) throw err;
 
-                    inventoryMsg = "    A quantity of " + addProd.itemQty + " " + addProd.itemName + "s have been added to inventory stock under the " +
+                    inventoryMsg = "    A quantity of " + addProd.itemQty + " " + addProd.itemName + "s have been added to your inventory under the " +
                         addProd.itemDept + " department";
                     console.log(inventoryMsg);
                     managerMenu();
