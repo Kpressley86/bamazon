@@ -1,23 +1,162 @@
-Running this application will first display all of the items available for sale. Include the ids, names, and prices of products for sale.
-The app should then prompt users with two messages.
+require("dotenv").config();
+
+const mysql = require("mysql");
+const inquirer = require("inquirer");
+const fs = require("fs");
+const cliTable = require("cli-table");
+const keys = require("./keys.js");
+const colors = require("colors");
+
+var connection = mysql.createConnection(keys.connection);
+
+connection.connect(function (err) {
+    if (err) throw err;
+});
+
+var orderMsg;
+var welcome =
+    "    **********************************************************************\n" +
+    "    **********              WELCOME TO BAMAZON                  **********\n" +
+    "    **********      One stop shop to everything BAMAZING!!      **********\n" +
+    "    **********                                                  **********\n" +
+    "    **********************************************************************\n\r"
+
+var exit = 
+    "    **********************************************************************\n" +
+    "    **********         THANKS FOR SHOPPING BAMAZON              **********\n" +
+    "    **********          Please visit us again! ;)               **********\n" +
+    "    **********                                                  **********\n" +
+    "    **********************************************************************\n\r"
 
 
+// DISPLAY PRODUCTS TABLE //
+function displayProducts() {
 
-The first should ask them the ID of the product they would like to buy.
-The second message should ask how many units of the product they would like to buy.
+    console.log(welcome);
+
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+
+        var table = new cliTable({
+            head: ["Item Number".cyan, "Product Name".cyan, "Department".cyan, "Price".cyan, "Quantity".cyan],
+            colWidths: [13, 20, 20, 13, 13],
+        });
+
+        for (var i = 0; i < res.length; i++) {
+            table.push(
+                [res[i].item_id, res[i].product_name, res[i].department_name, parseFloat(res[i].price).toFixed(2), res[i].stock_quantity]
+            );
+        };
+
+        console.log(table.toString());
+        orderMenu();
+    });
+};
 
 
+//  ORDER MENU  //
+function orderMenu() {
 
-Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Please select an item number you would like to purchase ",
+            name: "itemNum"
+        },
+        {
+            type: "input",
+            message: "How many would you like to buy?",
+            name: "Qty"
+        }
+    ])
+        .then(function (userOrder) {
+
+            connection.query("SELECT * FROM products JOIN departments ON products.department_name = departments.department_name",
+                function (err, res) {
+                    if (err) throw err;
+
+                    var i = userOrder.itemNum - 1;
+
+                    if (res[i].stock_quantity >= userOrder.Qty) {
+
+                        var updateQty = parseInt(res[i].stock_quantity) - parseInt(userOrder.Qty);
+
+                        var OrderTotal = parseFloat(res[i].price) * parseFloat(userOrder.Qty);
+                        OrderTotal = OrderTotal.toFixed(2);
+
+                        // UPDATES TABLE DATA //
+                        connection.query("UPDATE products SET ? WHERE ?",
+                            [{
+                                stock_quantity: updateQty
+                            },
+                            {
+                                item_id: userOrder.itemNum
+                            }],
+                            function (error, results) {
+
+                                if (error) throw error;
+
+                                orderMsg = "     Your order for " + userOrder.Qty + "  " + res[i].product_name + " has been placed.  \n" +
+                                    "     Your total is $ " + OrderTotal + "  \n";
+
+                                console.log(orderMsg);
+                            }
+                        );
 
 
+                        //-- Update the departments table total sales  --//
+                        var deptSales = parseFloat(res[i].total_sales) + parseFloat(OrderTotal);
+                        deptSales = deptSales.toFixed(2);
 
-If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
+                        connection.query("UPDATE departments SET ? WHERE ?", [
+                            { total_sales: deptSales },
+                            { department_name: res[userOrder.itemNum - 1].department_name }
+                        ],
+                            function (error, results) {
+                                continueShopping();
+                            }
+                        );
+
+                    }
+
+                    else {
+                        orderMsg = 
+                        "     Low on stock! -- We only have " + res[i].stock_quantity + " " + res[i].product_name + " \n" +
+                        "     Sorry for the inconvenience check back later.  " + userOrder.Qty + " " + res[i].product_name + " \n";
+
+                        console.log(orderMsg);
+                        continueShopping();
+                    }
+                });
+
+        });
+};
 
 
+// EXIT OR CONTINUE SHOPPING //
+function continueShopping() {
+    inquirer.prompt([
+        {
+            type: "confirm",
+            message: "Continue shopping? ",
+            name: "cont"
+        }
+    ])
+        .then(function (shopping) {
+            if (shopping.cont) {
+                displayProducts();
+            }
+            else {
+                exitBamazon();
+            }
+        });
+};
 
-However, if your store does have enough of the product, you should fulfill the customer's order.
+// EXIT //
+function exitBamazon() {
+    connection.end();
+    console.log(exit);
+};
 
 
-This means updating the SQL database to reflect the remaining quantity.
-Once the update goes through, show the customer the total cost of their purchase.
+displayProducts();
