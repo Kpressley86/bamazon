@@ -18,8 +18,8 @@ var welcome =
     "     ************************************************************\n" +
     "    ********              BAMAZON MANAGER APP             ********\n" +
     "   ********        Manage Inventory and Product Sales      ********\n" +
-    "    ********                                                ********\n" +
-    "     ************************************************************\n\r"
+    "    ********                                              ********\n" +
+    "     **********************************************************\n\r"
 
 var goodbye =
     "      *****************************************************\n" +
@@ -69,7 +69,7 @@ function displayProducts() {
 
         var table = new cliTable({
             head: ["Item Number".red, "Product Name".yellow, "Department".green, "Price".blue, "Quantity".magenta],
-            colWidths: [13, 20, 20, 13, 13],
+            colWidths: [13, 28, 18, 13, 12],
         });
 
         for (var i = 0; i < res.length; i++) {
