@@ -6,7 +6,7 @@ CREATE TABLE products (
   item_id INTEGER AUTO_INCREMENT NOT NULL,
   product_name VARCHAR(100),
   department_name VARCHAR(100),
-  price DECIMAL (10,2),
+  price DECIMAL(10,2),
   stock_quantity INTEGER,
   
   PRIMARY KEY(item_id)
@@ -30,9 +30,9 @@ SELECT * FROM products;
 CREATE TABLE departments (
     department_id INTEGER AUTO_INCREMENT NOT NULL,
     department_name VARCHAR(100),
-    over_head_costs DECIMAL (10,2),
-    product_sales DECIMAL (10,2),
-    total_profit DECIMAL (10,2),
+    over_head_costs DECIMAL(10,2),
+    product_sales DECIMAL(10,2),
+    total_profit DECIMAL(10,2),
 
     PRIMARY KEY(department_id)
 );

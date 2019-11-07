@@ -66,9 +66,9 @@ function displayDepartments() {
         });
 
         for (var i = 0; i < res.length; i++) {
-            var profit = res[i].total_sales - res[i].overhead_costs
+            var total_profit = res[i].product_sales - res[i].over_head_costs
             table.push(
-                [res[i].dept_id, res[i].department_name, res[i].overhead_costs, res[i].total_sales, profit]
+                [res[i].department_id, res[i].department_name, res[i].over_head_costs, res[i].product_sales, total_profit]
             );
         };
 
@@ -97,8 +97,8 @@ function addDepartment() {
             connection.query("INSERT INTO departments SET ?",
                 {
                     department_name: addDept.itemDept,
-                    overhead_costs: addDept.itemCost,
-                    total_sales: 0
+                    over_head_costs: addDept.itemCost,
+                    product_sales: 0
                 },
                 (err, res) => {
                     if (err) throw err;
