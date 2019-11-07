@@ -9,24 +9,24 @@ const colors = require("colors");
 
 var connection = mysql.createConnection(keys.connection);
 
-connection.connect(function (err) {
+connection.connect((err) => {
     if (err) throw err;
 });
 
 var orderMsg;
 var welcome =
-    "    **********************************************************************\n" +
-    "    **********              WELCOME TO BAMAZON                  **********\n" +
-    "    **********      One stop shop to everything BAMAZING!!      **********\n" +
-    "    **********                                                  **********\n" +
-    "    **********************************************************************\n\r"
+    "    ********************************************************************\n" +
+    "    **********             WELCOME TO BAMAZON                  *********\n" +
+    "    **********     One stop shop to everything BAMAZING!!      *********\n" +
+    "    **********                                                 *********\n" +
+    "    ********************************************************************\n\r"
 
-var exit = 
-    "    **********************************************************************\n" +
-    "    **********         THANKS FOR SHOPPING BAMAZON              **********\n" +
-    "    **********          Please visit us again! ;)               **********\n" +
-    "    **********                                                  **********\n" +
-    "    **********************************************************************\n\r"
+var exit =
+    "    ****************************************************************\n" +
+    "    ********         THANKS FOR SHOPPING BAMAZON            ********\n" +
+    "    ********              Come back soon!!!                 ********\n" +
+    "    ********                                                ********\n" +
+    "    ****************************************************************\n\r"
 
 
 // DISPLAY PRODUCTS TABLE //
@@ -34,7 +34,7 @@ function displayProducts() {
 
     console.log(welcome);
 
-    connection.query("SELECT * FROM products", function (err, res) {
+    connection.query("SELECT * FROM products", (err, res) => {
         if (err) throw err;
 
         var table = new cliTable({
@@ -69,10 +69,10 @@ function orderMenu() {
             name: "Qty"
         }
     ])
-        .then(function (userOrder) {
+        .then((userOrder) => {
 
             connection.query("SELECT * FROM products JOIN departments ON products.department_name = departments.department_name",
-                function (err, res) {
+                (err, res) => {
                     if (err) throw err;
 
                     var i = userOrder.itemNum - 1;
@@ -92,7 +92,7 @@ function orderMenu() {
                             {
                                 item_id: userOrder.itemNum
                             }],
-                            function (error, results) {
+                            (error, results) => {
 
                                 if (error) throw error;
 
@@ -112,7 +112,7 @@ function orderMenu() {
                             { total_sales: deptSales },
                             { department_name: res[userOrder.itemNum - 1].department_name }
                         ],
-                            function (error, results) {
+                            (error, results) => {
                                 continueShopping();
                             }
                         );
@@ -120,9 +120,9 @@ function orderMenu() {
                     }
 
                     else {
-                        orderMsg = 
-                        "     Low on stock! -- We only have " + res[i].stock_quantity + " " + res[i].product_name + " \n" +
-                        "     Sorry for the inconvenience check back later.  " + userOrder.Qty + " " + res[i].product_name + " \n";
+                        orderMsg =
+                            "     Low on stock! -- We only have " + res[i].stock_quantity + " " + res[i].product_name + " \n" +
+                            "     Sorry for the inconvenience check back later.  " + userOrder.Qty + " " + res[i].product_name + " \n";
 
                         console.log(orderMsg);
                         continueShopping();
@@ -142,7 +142,7 @@ function continueShopping() {
             name: "cont"
         }
     ])
-        .then(function (shopping) {
+        .then((shopping) => {
             if (shopping.cont) {
                 displayProducts();
             }
