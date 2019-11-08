@@ -4,9 +4,8 @@ Bamazon is an app I created using mySQL and Node.js. I used mySQL to create a lo
 
 ## Bamazon Customer 
 
+* On start up it will ask if you want to purchase something then list the available items. After selecting an item from the list it will ask you how many you would like to purchase.  After completing purchase it will display the cost and you can exit or continue shopping. Notice the Quantity of item change after purchase!
 ![GitHub Logo](/img/customer1.png)
-
-![GitHub Logo](/img/customer2.png)
 
 ![GitHub Logo](/img/customer3.png)
 
