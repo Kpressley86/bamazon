@@ -50,6 +50,8 @@ Bamazon is an app I created using mySQL and Node.js. I used mySQL to create a lo
 
 ## Bamazon Supervisor
 
+* Currently experiencing table issues!
+
 ![GitHub Logo](/img/supervisor1.png)
 
-Add To Your Portfolio
+
